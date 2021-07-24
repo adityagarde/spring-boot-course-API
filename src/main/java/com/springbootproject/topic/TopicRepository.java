@@ -1,7 +1,7 @@
 package com.springbootproject.topic;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TopicRepository extends CrudRepository<Topic, String> {
+public interface TopicRepository extends JpaRepository<Topic, String> {
 
 }

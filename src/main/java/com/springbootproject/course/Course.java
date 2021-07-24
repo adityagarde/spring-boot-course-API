@@ -1,6 +1,7 @@
 package com.springbootproject.course;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -10,6 +11,7 @@ import com.springbootproject.topic.Topic;
 public class Course {
 
 	@Id
+	@GeneratedValue
 	private String id;
 	private String name;
 	private String description;
@@ -17,7 +19,6 @@ public class Course {
 	private Topic topic;
 
 	public Course() {
-
 	}
 
 	public Course(String id, String name, String description, String topicId) {
