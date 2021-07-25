@@ -1,7 +1,7 @@
-package com.springbootproject.security.inmemory;
+package com.springbootproject.security.jdbc;
 
 import com.springbootproject.security.CustomAuthenticationFailureHandler;
-import com.springbootproject.security.CustomLogoutSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,36 +10,37 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-//@EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+import javax.sql.DataSource;
+
+@EnableWebSecurity
+public class SecurityJDBCConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private DataSource datasource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("JohnWatson").password(passwordAuthenticator().encode("JohnWatson")).roles("USER")
-                .and()
-                .withUser("IreneAdler").password(passwordAuthenticator().encode("IreneAdler")).roles("USER")
-                .and()
-                .withUser("SherlockHolmes").password(passwordAuthenticator().encode("SherlockHolmes")).roles("ADMIN")
-                .and()
-                .withUser("MycroftHolmes").password(passwordAuthenticator().encode("MycroftHolmes")).roles("ADMIN");
+        auth.jdbcAuthentication()
+                .dataSource(datasource)
+                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
+                .authoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?")
+                .passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public PasswordEncoder passwordAuthenticator() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/all").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/login*").permitAll()
+                .antMatchers("/").permitAll()
                 .and()
                 .httpBasic()
                 .and()
@@ -60,8 +61,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new CustomAuthenticationFailureHandler();
     }
 
-    @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
-        return new CustomLogoutSuccessHandler();
-    }
 }

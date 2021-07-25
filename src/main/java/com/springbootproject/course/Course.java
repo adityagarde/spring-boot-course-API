@@ -5,16 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springbootproject.topic.Topic;
 
 @Entity
 public class Course {
 
 	@Id
-	@GeneratedValue
 	private String id;
 	private String name;
 	private String description;
+
+	@JsonIgnore
 	@ManyToOne
 	private Topic topic;
 

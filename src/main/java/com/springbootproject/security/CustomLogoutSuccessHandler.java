@@ -1,4 +1,4 @@
-package com.springbootproject.security.inmemory;
+package com.springbootproject.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;

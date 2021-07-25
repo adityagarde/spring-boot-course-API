@@ -1,4 +1,4 @@
-package com.springbootproject.security.inmemory;
+package com.springbootproject.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
