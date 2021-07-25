@@ -16,12 +16,12 @@ public class TopicController {
         return "<h1>Welcome to University</h1>";
     }
 
-    @GetMapping("/allowUsers/topics")
+    @GetMapping("/all/topics")
     public List<Topic> getAllTopics() {
         return topicService.getAllTopics();
     }
 
-    @GetMapping("/allowUsers/topics/{id}")
+    @GetMapping("/all/topics/{id}")
     public Topic getTopic(@PathVariable String id) {
         return topicService.getTopic(id);
     }

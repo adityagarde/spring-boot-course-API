@@ -3,9 +3,10 @@ package com.springbootproject.course;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+
 
 import com.springbootproject.topic.Topic;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CourseController {
@@ -13,12 +14,12 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @RequestMapping("/allowUsers/topics/{id}/courses")
+    @GetMapping("/all/topics/{id}/courses")
     public List<Course> getAllCourses(@PathVariable String id) {
         return courseService.getAllCourses(id);
     }
 
-    @RequestMapping("/allowUsers/topics/{topicId}/courses/{courseId}")
+    @GetMapping("/all/topics/{topicId}/courses/{courseId}")
     public Course getCourse(@PathVariable String courseId) {
         return courseService.getCourse(courseId);
     }
